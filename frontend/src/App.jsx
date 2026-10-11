@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { analyzeHeatwaves } from './api'
 import ClimateStripes from './components/ClimateStripes'
 import EventList from './components/EventList'
+import InsightBanner from './components/InsightBanner'
 import RegionSearch from './components/RegionSearch'
 import StatsPanel from './components/StatsPanel'
 import YearlyTrendChart from './components/YearlyTrendChart'
@@ -114,7 +115,7 @@ export default function App() {
 
       {result && (
         <section className="results">
-          <p className="insight-headline">{result.summary}</p>
+          <InsightBanner result={result} />
 
           <YearlyTrendChart yearlyDays={result.yearly_heatwave_days} trend={result.trend} chartRef={chartRef} />
 
