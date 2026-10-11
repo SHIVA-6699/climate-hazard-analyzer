@@ -13,9 +13,6 @@ from app.services.weather_cache import get_daily_temperatures
 
 
 async def analyze_heatwaves(request: AnalyzeRequest) -> AnalyzeResponse:
-    # the percentile threshold needs a reasonably long baseline to be stable, so if the user's
-    # requested range is short, the baseline quietly extends backward (never forward) to cover
-    # at least `baseline_min_years` years; the user's own range is never widened
     baseline_start_year = min(request.start_year, request.end_year - settings.baseline_min_years + 1)
     baseline_start_year = max(baseline_start_year, settings.earliest_data_year)
 

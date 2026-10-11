@@ -1,13 +1,3 @@
-"""
-Caches daily temperature series in Mongo per location, keyed by rounded lat/lon.
-
-A request that falls entirely inside the range already cached is served straight from Mongo,
-with no call to Open-Meteo at all. A request that extends beyond what's cached fetches only the
-union of the new and old ranges once, merges it into the existing document, and saves it back,
-so a location's cached range only ever grows and a repeat visitor never re-downloads data
-that's already stored.
-"""
-
 from datetime import UTC, date, datetime, timedelta
 
 from app.core.config import settings
@@ -16,7 +6,6 @@ from app.core.weather_client import fetch_daily_max_temperatures
 
 
 def cache_key(lat: float, lon: float) -> str:
-    # rounding to ~1km keeps nearby queries (e.g. two spots in the same city) on one cache entry
     return f"{round(lat, 2)}_{round(lon, 2)}"
 
 

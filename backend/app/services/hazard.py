@@ -1,17 +1,3 @@
-"""
-Heatwave detection and trend analysis.
-
-Definition used here: a heatwave is a run of 3 or more consecutive days where the daily
-maximum temperature is above the 95th percentile of max temperatures for that location,
-with the percentile computed over a baseline period (see core/config.py).
-
-This is a simplification of how meteorologists usually define heatwaves (which often use a
-day-of-year-specific percentile, to account for the fact that 35C is unremarkable in July but
-extreme in January). Using one percentile across the whole baseline is far simpler to reason
-about and implement correctly in the time available, and is a documented assumption rather
-than a limitation the user discovers by surprise. See the README for the full rationale.
-"""
-
 from dataclasses import dataclass
 from datetime import date, datetime
 
@@ -43,12 +29,6 @@ def compute_threshold(baseline_temps: dict[str, float]) -> float:
 
 
 def detect_heatwave_events(daily_temps: dict[str, float], threshold: float) -> list[HeatwaveEvent]:
-    """Walk the sorted daily series once, tracking the current run of hot, consecutive days.
-
-    A run breaks when a day is not hot, or when the next day in the series is not the calendar
-    day right after it (meaning the underlying data has a gap). Any run that reaches the
-    minimum duration when it breaks, or when the series ends, is kept as an event.
-    """
     series = _sorted_series(daily_temps)
     events: list[HeatwaveEvent] = []
     current_run: list[tuple[date, float]] = []
@@ -79,7 +59,6 @@ def detect_heatwave_events(daily_temps: dict[str, float], threshold: float) -> l
 
 
 def yearly_heatwave_days(events: list[HeatwaveEvent], start_year: int, end_year: int) -> dict[int, int]:
-    """Total heatwave days per year, attributing each event to the year it started in."""
     counts = {year: 0 for year in range(start_year, end_year + 1)}
     for event in events:
         year = datetime.fromisoformat(event.start).year
@@ -131,13 +110,6 @@ SIGNIFICANCE_LEVEL = 0.05
 
 
 def build_summary_insight(trend: dict, region_label: str, start_year: int, end_year: int) -> str:
-    """
-    The sentence makes a point of not claiming more certainty than the statistics support: a big
-    swing between the early and late years of a short, noisy series is common even with no real
-    trend underneath it, so the wording only commits to "a trend" when the Mann-Kendall test
-    (the standard test for this in climate science, less sensitive to outliers than regression)
-    actually calls the series significant at the 0.05 level.
-    """
     period = f"{start_year}-{end_year}"
     change = trend["percent_change"]
     mk_p = trend.get("mann_kendall_p_value")

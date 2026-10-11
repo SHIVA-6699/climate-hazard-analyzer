@@ -10,12 +10,6 @@ class WeatherApiError(Exception):
 
 
 async def fetch_daily_max_temperatures(lat: float, lon: float, start: date, end: date) -> dict[str, float]:
-    """Fetch daily max temperature (Celsius) for a point from Open-Meteo's historical archive.
-
-    Returns a dict of ISO date string -> temperature. Open-Meteo omits a day entirely when it
-    has no reading for that station-grid cell, rather than returning null, so gaps are simply
-    missing keys here, not something the caller has to filter out.
-    """
     params = {
         "latitude": lat,
         "longitude": lon,
@@ -44,7 +38,6 @@ async def fetch_daily_max_temperatures(lat: float, lon: float, start: date, end:
 
 
 async def geocode_place(query: str, count: int = 5) -> list[dict]:
-    """Look up a place name and return candidate matches with coordinates."""
     params = {"name": query, "count": count, "language": "en", "format": "json"}
     async with httpx.AsyncClient(timeout=settings.open_meteo_timeout_seconds) as client:
         try:

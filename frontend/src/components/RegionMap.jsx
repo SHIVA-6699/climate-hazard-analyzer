@@ -2,8 +2,6 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet'
 
-// Leaflet's default marker icon references image files that Vite doesn't bundle by
-// default; point it at the CDN copies instead of fighting the bundler over it.
 const markerIcon = new L.Icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',

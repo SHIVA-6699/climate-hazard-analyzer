@@ -17,8 +17,6 @@ class Settings(BaseSettings):
     open_meteo_geocoding_url: str = "https://geocoding-api.open-meteo.com/v1/search"
     open_meteo_timeout_seconds: float = 20.0
 
-    # how far back of data to request beyond the user's start year, to build a stable
-    # percentile baseline even when the user picks a short or recent range
     baseline_min_years: int = 15
     earliest_data_year: int = 1950
 

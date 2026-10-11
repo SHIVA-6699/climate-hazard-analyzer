@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: climate-hazard-analyzer
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB_NAME
+        value: climate_hazard
+      - key: ENVIRONMENT
+        value: production
