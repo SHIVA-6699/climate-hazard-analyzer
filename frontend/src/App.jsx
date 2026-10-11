@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { analyzeHeatwaves } from './api'
@@ -10,6 +10,7 @@ import YearlyTrendChart from './components/YearlyTrendChart'
 import YearRangeControl from './components/YearRangeControl'
 import { getErrorMessage } from './utils/errors'
 import { exportResultAsCsv } from './utils/exportCsv'
+import { exportResultAsPdf } from './utils/exportPdf'
 
 const RegionMap = lazy(() => import('./components/RegionMap'))
 
@@ -19,6 +20,7 @@ export default function App() {
   const [region, setRegion] = useState(null)
   const [years, setYears] = useState(DEFAULT_YEARS)
   const [pickerMode, setPickerMode] = useState('search')
+  const chartRef = useRef(null)
 
   const mutation = useMutation({
     mutationFn: analyzeHeatwaves,
@@ -36,6 +38,12 @@ export default function App() {
   }
 
   const result = mutation.data
+
+  const handleExportPdf = () => {
+    if (!result) return
+    const chartImage = chartRef.current?.toBase64Image?.('image/png', 1.0)
+    exportResultAsPdf(result, chartImage)
+  }
 
   return (
     <div className="shell">
@@ -108,15 +116,20 @@ export default function App() {
         <section className="results">
           <p className="insight-headline">{result.summary}</p>
 
-          <YearlyTrendChart yearlyDays={result.yearly_heatwave_days} trend={result.trend} />
+          <YearlyTrendChart yearlyDays={result.yearly_heatwave_days} trend={result.trend} chartRef={chartRef} />
 
           <StatsPanel result={result} />
 
           <div className="panel-header">
             <h2>Heatwave events</h2>
-            <button type="button" className="btn btn-secondary" onClick={() => exportResultAsCsv(result)}>
-              Export CSV
-            </button>
+            <div className="export-actions">
+              <button type="button" className="btn btn-secondary" onClick={() => exportResultAsCsv(result)}>
+                Export CSV
+              </button>
+              <button type="button" className="btn btn-secondary" onClick={handleExportPdf}>
+                Export PDF
+              </button>
+            </div>
           </div>
           <EventList events={result.events} />
         </section>

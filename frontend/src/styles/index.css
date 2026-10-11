@@ -445,6 +445,11 @@ input:focus {
   color: var(--ink);
 }
 
+.export-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .event-list-wrap {
   background: var(--surface);
   border: 1px solid var(--border);
