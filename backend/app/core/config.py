@@ -19,6 +19,7 @@ class Settings(BaseSettings):
 
     baseline_min_years: int = 15
     earliest_data_year: int = 1950
+    archive_data_lag_days: int = 5
 
     cache_ttl_days: int = 30
 

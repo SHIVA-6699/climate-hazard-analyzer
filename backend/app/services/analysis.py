@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from app.core.config import settings
 from app.models.schemas import AnalyzeRequest, AnalyzeResponse, HeatwaveEventOut, TrendOut
@@ -16,8 +16,11 @@ async def analyze_heatwaves(request: AnalyzeRequest) -> AnalyzeResponse:
     baseline_start_year = min(request.start_year, request.end_year - settings.baseline_min_years + 1)
     baseline_start_year = max(baseline_start_year, settings.earliest_data_year)
 
+    latest_available = date.today() - timedelta(days=settings.archive_data_lag_days)
+
     fetch_start = date(baseline_start_year, 1, 1)
-    fetch_end = date(request.end_year, 12, 31)
+    fetch_end = min(date(request.end_year, 12, 31), latest_available)
+    fetch_end = max(fetch_end, fetch_start)
 
     daily_temps = await get_daily_temperatures(request.lat, request.lon, fetch_start, fetch_end)
     threshold = compute_threshold(daily_temps)
