@@ -47,22 +47,44 @@ button {
 /* ---------- header ---------- */
 
 .masthead {
-  margin-bottom: 28px;
+  position: relative;
+  background: var(--ink);
+  padding: 56px 0 0;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+
+.masthead-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  position: relative;
+  z-index: 1;
 }
 
 .masthead h1 {
   margin: 0;
-  font-size: 1.9rem;
+  font-size: 2.6rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--ink);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: #fff;
+  max-width: 14ch;
 }
 
 .masthead p {
-  margin: 8px 0 0;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  max-width: 60ch;
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 1.05rem;
+  max-width: 48ch;
+}
+
+.masthead-stripes {
+  height: 64px;
+  gap: 0;
+  border-radius: 0;
+  margin: 0;
+  opacity: 0.85;
 }
 
 /* ---------- controls ---------- */
@@ -446,6 +468,10 @@ input:focus {
 .chart-legend-swatch-line {
   height: 2px;
   border-radius: 0;
+}
+
+.chart-legend-swatch-gradient {
+  width: 28px;
 }
 
 .chart-canvas {

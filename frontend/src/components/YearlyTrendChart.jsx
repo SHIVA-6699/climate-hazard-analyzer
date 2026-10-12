@@ -24,14 +24,24 @@ ChartJS.register(
   Legend,
 )
 
-const HAZARD_RED = '#B3331E'
 const INK = '#1B2127'
 const GRID = '#DCDFD9'
+
+const HEAT_SCALE_LOW = [242, 201, 76]
+const HEAT_SCALE_HIGH = [138, 23, 11]
+
+function heatColor(value, max) {
+  if (max <= 0) return `rgb(${HEAT_SCALE_LOW.join(',')})`
+  const t = Math.min(value / max, 1)
+  const mix = HEAT_SCALE_LOW.map((c, i) => Math.round(c + (HEAT_SCALE_HIGH[i] - c) * t))
+  return `rgb(${mix.join(',')})`
+}
 
 export default function YearlyTrendChart({ yearlyDays, trend, chartRef }) {
   const years = Object.keys(yearlyDays).map(Number).sort((a, b) => a - b)
   const days = years.map((year) => yearlyDays[year])
   const trendLine = years.map((year) => trend.slope_days_per_year * year + trend.intercept)
+  const maxDays = Math.max(...days, 1)
 
   const data = {
     labels: years,
@@ -40,7 +50,7 @@ export default function YearlyTrendChart({ yearlyDays, trend, chartRef }) {
         type: 'bar',
         label: 'Heatwave days',
         data: days,
-        backgroundColor: HAZARD_RED,
+        backgroundColor: days.map((value) => heatColor(value, maxDays)),
         borderRadius: 2,
         maxBarThickness: 26,
         order: 2,
@@ -91,8 +101,11 @@ export default function YearlyTrendChart({ yearlyDays, trend, chartRef }) {
     <div className="chart-box">
       <div className="chart-legend">
         <span className="chart-legend-item">
-          <span className="chart-legend-swatch" style={{ backgroundColor: HAZARD_RED }} />
-          Heatwave days
+          <span
+            className="chart-legend-swatch chart-legend-swatch-gradient"
+            style={{ background: `linear-gradient(90deg, rgb(${HEAT_SCALE_LOW.join(',')}), rgb(${HEAT_SCALE_HIGH.join(',')}))` }}
+          />
+          Heatwave days (color = intensity)
         </span>
         <span className="chart-legend-item">
           <span className="chart-legend-swatch chart-legend-swatch-line" style={{ backgroundColor: INK }} />

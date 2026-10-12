@@ -47,12 +47,16 @@ export default function App() {
   }
 
   return (
-    <div className="shell">
+    <>
       <header className="masthead">
-        <h1>Climate Hazard Trend Analyzer</h1>
-        <p>Pick a region and a time range to see how heatwaves there have changed, with the reasoning behind it.</p>
+        <div className="masthead-inner">
+          <h1>Climate Hazard Trend Analyzer</h1>
+          <p>Pick a region and a time range to see how heatwaves there have changed, with the reasoning behind it.</p>
+        </div>
+        <ClimateStripes className="masthead-stripes" />
       </header>
 
+      <div className="shell">
       <section className="controls">
         <div className="controls-row">
           <div className="picker-tabs" role="tablist" aria-label="Region selection method">
@@ -108,7 +112,6 @@ export default function App() {
 
       {!result && !mutation.isPending && (
         <section className="hero-empty">
-          <ClimateStripes />
           <p>Choose a region above and click Analyze to see its heatwave history.</p>
         </section>
       )}
@@ -135,6 +138,7 @@ export default function App() {
           <EventList events={result.events} />
         </section>
       )}
-    </div>
+      </div>
+    </>
   )
 }
