@@ -163,6 +163,19 @@ input:focus {
   width: 90px;
 }
 
+.year-range input[aria-invalid="true"] {
+  border-color: var(--hazard);
+}
+
+.field-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--hazard);
+  max-width: 140px;
+}
+
 .btn {
   border: none;
   border-radius: var(--radius-sm);

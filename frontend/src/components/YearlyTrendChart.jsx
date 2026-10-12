@@ -1,16 +1,28 @@
 import {
+  BarController,
   BarElement,
   CategoryScale,
   Chart as ChartJS,
   Legend,
   LinearScale,
+  LineController,
   LineElement,
   PointElement,
   Tooltip,
 } from 'chart.js'
 import { Chart } from 'react-chartjs-2'
 
-ChartJS.register(BarElement, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend)
+ChartJS.register(
+  BarController,
+  LineController,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+)
 
 const HAZARD_RED = '#B3331E'
 const INK = '#1B2127'
